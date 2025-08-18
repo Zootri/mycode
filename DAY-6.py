@@ -1,12 +1,18 @@
 # Contact Management System
+import re
+import smtplib
+import random
+
 class Contact:
     def __init__(self, name, phone, email):
         self.name = name
         self.phone = phone
         self.email = email
-
+        self.verify = verify
+        
     def display(self):
-        print(f"Name: {self.name}, Phone: {self.phone}, Email: {self.email}")
+        status = "verified" if self.verify else "not verified"
+        print(f"Name: {self.name}, Phone: {self.phone}, Email: {self.email}({status}) ")
 
 
 class Manager:
@@ -37,6 +43,25 @@ class Manager:
                 print(f"Contact {name} deleted.")
                 return
         print("Contact not found.")
+    def send_verification_email(receiver_email):
+        code = str(random.randint(100000, 999999))
+    sender_email = "your-email@gmail.com"
+    sender_password = "your-app-password"
+
+    message = f"Subject: Email Verification\n\nYour verification code is: {code}"
+
+    try:
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
+        server.login(sender_email, sender_password)
+        server.sendmail(sender_email, receiver_email, message)
+        server.quit()
+        print(f"Verification code sent to {receiver_email}")
+        return code
+    except Exception as e:
+        print("Error sending email:", e)
+        return None
+
 
 
 manager = Manager()  # Create an instance of Manager
